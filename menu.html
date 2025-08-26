@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piquant • Menu</title>
+  <meta name="description" content="Piquant Menu — wholesome, home-cooked dishes with the taste of tradition." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inder&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-cream:#EEE6D7;
+      --ink:#2E281F;
+      --gold:#C09C59;
+      --muted:#6b6358;
+      --line:rgba(46,40,31,.30);
+      --card:#F6EFE2;
+      --chip:#E8DFCF;
+      --max:1160px;
+      --gutter:24px;
+      --sp:24px; --sp-sm:12px; --sp-lg:36px;
+      --radius:18px; --radius-lg:26px;
+    }
+
+    @font-face{font-family:"Hiro Misake";src:url('./HiroMisake.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg-cream);color:var(--ink);font-family:'Inder',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    img{max-width:100%;display:block}
+    a{text-decoration:none;color:inherit}
+    .container{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+    .divider{height:1px;background:var(--line)}
+    .section{padding:var(--sp-lg) 0}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:50;background:var(--bg-cream)}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand-mark{width:34px;height:34px;border:1px solid var(--ink);border-radius:10px;display:grid;place-items:center;position:relative}
+    .brand-mark::after{content:"";position:absolute;bottom:-6px;left:4px;right:4px;height:8px;background:var(--gold);border-radius:20px}
+    .brand-name{font-family:"Hiro Misake",'Inder';font-size:28px;letter-spacing:.5px}
+
+    .nav-wrap{position:relative;display:flex;align-items:center;gap:12px}
+    .nav-links{position:relative;display:flex;align-items:center;gap:14px}
+    .nav-links a{position:relative;padding:8px 10px;border-radius:10px}
+    .nav-indicator{position:absolute;bottom:-8px;height:10px;background:var(--gold);border-radius:999px;transition:left .35s ease,width .35s ease;pointer-events:none}
+
+    .menu-btn{display:none;border:1px solid var(--ink);background:#fff;border-radius:10px;padding:8px 10px}
+    .mobile-menu{display:none}
+    @media (max-width:760px){
+      .nav-links{display:none}
+      .menu-btn{display:inline-flex}
+      .mobile-menu{position:absolute;top:100%;right:0;background:var(--card);border:1px solid var(--ink);border-radius:12px;padding:8px;display:none;flex-direction:column;gap:6px}
+      .mobile-menu a{padding:10px 12px;border-radius:8px}
+      .mobile-menu a:hover{background:var(--chip)}
+    }
+
+    /* Page Head */
+    .pagehead{text-align:center;padding:22px 0 2px}
+    .pagehead h1{font-family:"Hiro Misake",'Inder';font-size:30px;margin:8px 0 0}
+    .subtitle{color:var(--muted);font-size:14px;letter-spacing:.5px}
+
+    /* Filters */
+    .filters{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:12px}
+    .filter{background:#fff;border:1px solid var(--ink);border-radius:999px;padding:8px 14px;cursor:pointer;user-select:none}
+    .filter.active{background:var(--gold);color:#fff}
+
+    /* Menu Grid */
+    .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp);margin-top:var(--sp)}
+    .card{background:#fff;border:1.5px solid var(--ink);border-radius:22px;padding:12px;display:flex;flex-direction:column}
+    .card .thumb{height:180px;border:1.5px solid var(--ink);border-radius:16px;background:#d9d9d9;position:relative}
+    .card .thumb::after{content:"";position:absolute;left:14px;right:14px;bottom:12px;height:18px;background:var(--gold);border-radius:18px}
+    .card h3{margin:10px 0 6px;font-size:18px}
+    .meta{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .price{background:rgba(192,156,89,.25);border:1px solid var(--gold);border-radius:999px;padding:4px 10px;font-weight:700}
+    .badge{font-size:12px;color:var(--muted)}
+    .actions{display:flex;gap:10px;margin-top:10px}
+    .btn{border:1px solid var(--ink);background:#fff;border-radius:999px;padding:8px 12px;cursor:pointer}
+    .btn.gold{background:var(--gold);color:#fff}
+
+    /* Category blocks (like section dividers) */
+    .pill-title{display:inline-block;background:var(--gold);color:#fff;padding:10px 18px;border-radius:16px;font-family:"Hiro Misake",'Inder';letter-spacing:1px}
+    .section-title{display:flex;justify-content:center;align-items:center;margin-top:var(--sp-lg)}
+
+    /* Footer */
+    footer{margin:40px 0 24px;color:var(--muted);font-size:14px;text-align:center}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .menu-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:560px){
+      .menu-grid{grid-template-columns:1fr}
+      .brand-name{font-size:24px}
+    }
+    /* Toast (Add-to-Cart) */
+.toast-container{
+  position:fixed; bottom:20px; right:20px;
+  display:flex; flex-direction:column; gap:10px;
+  z-index:1000; pointer-events:none;
+}
+.toast{
+  pointer-events:auto;
+  background:var(--ink); color:#fff;
+  border:1px solid var(--ink); border-radius:14px;
+  padding:10px 14px; min-width: 220px; max-width: 360px;
+  box-shadow:0 6px 18px rgba(0,0,0,.18);
+  transform:translateY(10px); opacity:0;
+  animation:toast-in .25s ease forwards;
+  font-size:14px;
+}
+.toast .accent{
+  height:8px; width:80px; background:var(--gold);
+  border-radius:999px; margin-top:8px;
+}
+@keyframes toast-in{ to{ transform:translateY(0); opacity:1; } }
+.toast.hide{ animation:toast-out .2s ease forwards; }
+@keyframes toast-out{ to{ transform:translateY(10px); opacity:0; } }
+
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="Piquant Home">
+        <span class="brand-mark" aria-hidden="true">👩‍🍳</span>
+        <span class="brand-name">Piquant</span>
+      </a>
+      <div class="nav-wrap">
+        <nav class="nav-links" id="primaryNav" aria-label="Primary">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="menu.html" class="nav-link">Menu</a>
+          <a href="about.html" class="nav-link">About Us</a>
+          <span class="nav-indicator" id="navIndicator"></span>
+        </nav>
+        <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>
+        <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="false">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="menu.html" class="nav-link">Menu</a>
+          <a href="about.html" class="nav-link">About Us</a>
+        </div>
+      </div>
+      <a href="cart.html" class="cart" id="cartBtn">
+  Cart <b id="cartCount">0</b>
+</a>
+
+    </div>
+    <div class="divider"></div>
+  </header>
+
+  <!-- Page Head -->
+  <section class="container pagehead">
+    <h1>Menu</h1>
+    <div class="subtitle">Balanced, comforting, home-cooked dishes. No images yet — placeholders match your design.</div>
+
+    <!-- Filters -->
+    <div class="filters" id="filters">
+      <span class="filter active" data-filter="all">All</span>
+      <span class="filter" data-filter="veg">Veg</span>
+      <span class="filter" data-filter="nonveg">Non‑Veg</span>
+      <span class="filter" data-filter="special">Chef’s Special</span>
+      <span class="filter" data-filter="lowoil">Low Oil</span>
+    </div>
+  </section>
+
+  <!-- Today’s Specials -->
+  <section class="container section">
+    <div class="section-title"><span class="pill-title">TODAY’S SPECIALS</span></div>
+    <div class="menu-grid" id="specialsGrid"></div>
+  </section>
+
+  <!-- Regular Menu -->
+  <section class="container section">
+    <div class="section-title"><span class="pill-title">FULL MENU</span></div>
+    <div class="menu-grid" id="menuGrid"></div>
+  </section>
+
+  <footer>
+    <div class="container">© <span id="year"></span> Piquant. Built with love and good food.</div>
+  </footer>
+
+<script>
+  /* ========== Mobile Menu ========== */
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => {
+      const open = mobileMenu.style.display === 'flex';
+      mobileMenu.style.display = open ? 'none' : 'flex';
+      menuBtn.setAttribute('aria-expanded', String(!open));
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      mobileMenu.style.display = 'none';
+      menuBtn.setAttribute('aria-expanded', 'false');
+    }));
+  }
+
+  /* ========== Golden Bubble Indicator (allows real links) ========== */
+  const nav = document.getElementById('primaryNav');
+  const indicator = document.getElementById('navIndicator');
+  const links = Array.from(document.querySelectorAll('#primaryNav .nav-link'));
+
+  function moveIndicatorTo(el) {
+    if (!el || !indicator || !nav) return;
+    const navRect = nav.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const left = (elRect.left - navRect.left) + 6;
+    const width = elRect.width - 12;
+    indicator.style.left = left + 'px';
+    indicator.style.width = width + 'px';
+    indicator.style.height = '10px';
+  }
+  function setActive(el){ links.forEach(a=> a.classList.toggle('active', a===el)); moveIndicatorTo(el); }
+
+  links.forEach(a => a.addEventListener('click', (e) => {
+    const href = (a.getAttribute('href') || '').trim();
+    const isHash = href === '' || href === '#' || href.startsWith('#');
+    if (isHash) { e.preventDefault(); setActive(a); }
+  }));
+
+  window.addEventListener('load', () => {
+    const currentFile = (location.pathname.split('/').pop() || '').toLowerCase();
+    let current = links[0];
+    for (const a of links) {
+      const href = (a.getAttribute('href') || '').toLowerCase();
+      if (href && href !== '#' && !href.startsWith('#')) {
+        const hrefFile = href.split('/').pop();
+        if (hrefFile === currentFile) { current = a; break; }
+      }
+    }
+    setActive(current);
+  });
+
+  window.addEventListener('resize', () => {
+    const current = document.querySelector('#primaryNav .nav-link.active') || links[0];
+    moveIndicatorTo(current);
+  });
+
+  /* ========== Cart Helpers (shared with cart.html) ========== */
+  const CART_KEY = 'piq-cart';
+  const cartBadge = document.getElementById('cartCount');
+
+  function getCart(){ try { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); } catch { return []; } }
+  function setCart(items){ localStorage.setItem(CART_KEY, JSON.stringify(items)); updateBadge(items); }
+  function updateBadge(items = getCart()){
+    const count = items.reduce((s,i)=> s + (i.qty || 0), 0);
+    if (cartBadge) cartBadge.textContent = String(count);
+  }
+
+  function addToCart(item){
+    if(!item) return;
+    const cart = getCart();
+    const existing = cart.find(x => x.id === item.id);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ id: item.id, name: item.name, price: item.price, qty: 1, tags: item.tags || [] });
+    }
+    setCart(cart);
+  }
+
+  /* ========== Demo Data & Filtering (with numeric prices + stable IDs) ========== */
+  const SPECIALS = [
+    {id:'sp1', name:'Dal Tadka + Jeera Rice', price:159, tags:['veg','lowoil','special']},
+    {id:'sp2', name:'Paneer Butter & Rotis',  price:219, tags:['veg','special']},
+    {id:'sp3', name:'Chicken Curry + Rice',   price:249, tags:['nonveg']},
+  ];
+  const MENU = [
+    {id:'m1', name:'Veg Pulao + Raita',            price:179, tags:['veg','lowoil']},
+    {id:'m2', name:'Rajma Chawal',                 price:169, tags:['veg']},
+    {id:'m3', name:'Egg Curry + Rice',             price:199, tags:['nonveg']},
+    {id:'m4', name:'Aloo Paratha (2) + Curd',      price:149, tags:['veg']},
+    {id:'m5', name:'Chole Bhature',                price:189, tags:['veg']},
+    {id:'m6', name:'Grilled Chicken Bowl',         price:259, tags:['nonveg','lowoil']},
+  ];
+
+  const CATALOG = [...SPECIALS, ...MENU];
+
+  function rupees(n){ return '₹' + Math.round(n).toLocaleString('en-IN'); }
+
+  function cardHTML(item){
+    return `
+      <article class="card" data-id="${item.id}">
+        <div class="thumb" role="img" aria-label="${item.name}"></div>
+        <h3>${item.name}</h3>
+        <div class="meta">
+          <span class="badge">${item.tags.includes('veg') ? 'Veg' : (item.tags.includes('nonveg') ? 'Non-Veg' : '')}</span>
+          <span class="price">${rupees(item.price)}</span>
+        </div>
+        <div class="actions">
+          <button class="btn">Details</button>
+          <button class="btn gold" data-id="${item.id}">Add</button>
+        </div>
+      </article>`;
+  }
+
+  function render(list, into){
+    const el = document.getElementById(into);
+    el.innerHTML = list.map(cardHTML).join('');
+  }
+
+  function applyFilter(type){
+    document.querySelectorAll('.filter').forEach(f=>f.classList.toggle('active', f.dataset.filter===type));
+    const filt = (arr) => type==='all' ? arr : arr.filter(i=> i.tags.includes(type));
+    render(filt(SPECIALS), 'specialsGrid');
+    render(filt(MENU), 'menuGrid');
+  }
+
+  // Event delegation for "Add" buttons (works after re-renders)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn.gold[data-id]');
+    if (!btn) return;
+    const id = btn.getAttribute('data-id');
+    const item = CATALOG.find(i => i.id === id);
+    addToCart(item);
+  });
+
+  // Init
+  (function(){
+    document.getElementById('year').textContent = new Date().getFullYear();
+    render(SPECIALS, 'specialsGrid');
+    render(MENU, 'menuGrid');
+    document.querySelectorAll('.filter').forEach(f=> f.addEventListener('click', ()=> applyFilter(f.dataset.filter)));
+    updateBadge(); // show existing count if any
+  })();
+  /* Toast helpers */
+function ensureToastContainer(){
+  let c = document.querySelector('.toast-container');
+  if(!c){
+    c = document.createElement('div');
+    c.className = 'toast-container';
+    c.setAttribute('aria-live','polite');
+    c.setAttribute('aria-atomic','true');
+    document.body.appendChild(c);
+  }
+  return c;
+}
+function showToast(message){
+  const c = ensureToastContainer();
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<div>${message}</div><div class="accent"></div>`;
+  c.appendChild(t);
+  // auto-dismiss
+  setTimeout(()=>{
+    t.classList.add('hide');
+    t.addEventListener('animationend', ()=> t.remove(), { once:true });
+  }, 1600);
+}
+
+/* Updated addToCart */
+function addToCart(item){
+  if(!item) return;
+  const cart = getCart();
+  const existing = cart.find(x => x.id === item.id);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ id: item.id, name: item.name, price: item.price, qty: 1, tags: item.tags || [] });
+  }
+  setCart(cart);
+  showToast(`Added to cart: <b>${item.name}</b>`);
+}
+
+</script>
+
+</body>
+</html>

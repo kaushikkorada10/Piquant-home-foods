@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piquant • Cart</title>
+  <meta name="description" content="Your Piquant cart — review items, apply promo, and checkout." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inder&display=swap" rel="stylesheet">
+  <style>
+    :root{ --bg-cream:#EEE6D7; --ink:#2E281F; --gold:#C09C59; --muted:#6b6358; --line:rgba(46,40,31,.30); --card:#F6EFE2; --chip:#E8DFCF; --max:1160px; --gutter:24px; --sp:24px; --sp-sm:12px; --sp-lg:36px; --radius:18px; --radius-lg:26px; }
+
+    @font-face{font-family:"Hiro Misake";src:url('./HiroMisake.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg-cream);color:var(--ink);font-family:'Inder',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    img{max-width:100%;display:block}
+    a{text-decoration:none;color:inherit}
+    .container{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+    .divider{height:1px;background:var(--line)}
+    .section{padding:var(--sp-lg) 0}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:50;background:var(--bg-cream)}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand-mark{width:34px;height:34px;border:1px solid var(--ink);border-radius:10px;display:grid;place-items:center;position:relative}
+    .brand-mark::after{content:"";position:absolute;bottom:-6px;left:4px;right:4px;height:8px;background:var(--gold);border-radius:20px}
+    .brand-name{font-family:"Hiro Misake",'Inder';font-size:28px;letter-spacing:.5px}
+
+    .nav-wrap{position:relative;display:flex;align-items:center;gap:12px}
+    .nav-links{position:relative;display:flex;align-items:center;gap:14px}
+    .nav-links a{position:relative;padding:8px 10px;border-radius:10px}
+    .nav-indicator{position:absolute;bottom:-8px;height:10px;background:var(--gold);border-radius:999px;transition:left .35s ease,width .35s ease;pointer-events:none}
+
+    .menu-btn{display:none;border:1px solid var(--ink);background:#fff;border-radius:10px;padding:8px 10px}
+    .mobile-menu{display:none}
+    @media (max-width:760px){ .nav-links{display:none} .menu-btn{display:inline-flex} .mobile-menu{position:absolute;top:100%;right:0;background:var(--card);border:1px solid var(--ink);border-radius:12px;padding:8px;display:none;flex-direction:column;gap:6px} .mobile-menu a{padding:10px 12px;border-radius:8px} .mobile-menu a:hover{background:var(--chip)} }
+
+    /* Page Head */
+    .pagehead{text-align:center;padding:22px 0 2px}
+    .pagehead h1{font-family:"Hiro Misake",'Inder';font-size:30px;margin:8px 0 0}
+    .subtitle{color:var(--muted);font-size:14px;letter-spacing:.5px}
+
+    /* Cart Layout */
+    .cart-wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:var(--sp);align-items:start}
+    .cart-card{background:#fff;border:1.5px solid var(--ink);border-radius:22px;padding:14px}
+    .summary-card{background:#fff;border:1.5px solid var(--ink);border-radius:22px;padding:14px;position:sticky;top:86px}
+
+    /* Cart Items */
+    .cart-item{display:grid;grid-template-columns:1fr auto auto auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+    .cart-item:last-child{border-bottom:none}
+    .thumb{height:70px;border:1.5px solid var(--ink);border-radius:12px;background:#d9d9d9;position:relative}
+    .thumb::after{content:"";position:absolute;left:10px;right:10px;bottom:8px;height:12px;background:var(--gold);border-radius:12px}
+    .name{font-size:16px}
+    .badge{font-size:12px;color:var(--muted)}
+    .qty{display:inline-flex;align-items:center;border:1px solid var(--ink);border-radius:999px;overflow:hidden}
+    .qty button{background:#fff;border:none;padding:6px 10px;cursor:pointer}
+    .qty span{min-width:28px;text-align:center}
+    .price{font-weight:700}
+    .remove{border:none;background:transparent;color:#A43A3A;cursor:pointer}
+
+    /* Promo + Address */
+    .row{display:flex;gap:10px;align-items:center}
+    .field{flex:1;border:1px solid var(--ink);border-radius:999px;background:#fff;padding:10px 12px}
+    .btn{border:1px solid var(--ink);background:#fff;border-radius:999px;padding:10px 16px;cursor:pointer}
+    .btn.gold{background:var(--gold);color:#fff}
+
+    /* Totals */
+    .totals{margin-top:12px;border-top:1px dashed var(--ink);padding-top:12px;font-size:14px}
+    .totals .line{display:flex;justify-content:space-between;margin:8px 0}
+    .totals .line.total{font-weight:800;border-top:1px solid var(--ink);padding-top:10px;margin-top:10px}
+
+    .empty{display:grid;place-items:center;height:220px;color:var(--muted)}
+
+    footer{margin:40px 0 24px;color:var(--muted);font-size:14px;text-align:center}
+
+    /* Responsive */
+    @media (max-width:980px){ .cart-wrap{grid-template-columns:1fr} .summary-card{position:relative;top:auto} }
+    @media (max-width:560px){ .cart-item{grid-template-columns:1fr auto auto;gap:10px} .price{justify-self:end} }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="Piquant Home">
+        <span class="brand-mark" aria-hidden="true">👩‍🍳</span>
+        <span class="brand-name">Piquant</span>
+      </a>
+      <div class="nav-wrap">
+        <nav class="nav-links" id="primaryNav" aria-label="Primary">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="menu.html" class="nav-link">Menu</a>
+          <a href="about.html" class="nav-link">About Us</a>
+          <a href="cart.html" class="nav-link">Cart</a>
+          <span class="nav-indicator" id="navIndicator"></span>
+        </nav>
+        <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>
+        <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="false">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="menu.html" class="nav-link">Menu</a>
+          <a href="about.html" class="nav-link">About Us</a>
+          <a href="cart.html" class="nav-link">Cart</a>
+        </div>
+      </div>
+      <div class="cart" id="cartBtn">Cart <b id="cartCount">0</b></div>
+    </div>
+    <div class="divider"></div>
+  </header>
+
+  <!-- Page Head -->
+  <section class="container pagehead">
+    <h1>Your Cart</h1>
+    <div class="subtitle">Review your selection and proceed to checkout.</div>
+  </section>
+
+  <!-- Cart -->
+  <section class="container section">
+    <div class="cart-wrap">
+      <!-- Items -->
+      <div class="cart-card" id="cartItems">
+        <div class="empty" id="emptyState">Your cart is empty. <a href="menu.html" style="margin-left:6px;text-decoration:underline">Add some tasty food →</a></div>
+      </div>
+
+      <!-- Summary -->
+      <aside class="summary-card">
+        <h3 style="margin:0 0 8px">Summary</h3>
+        <div class="row" style="margin:8px 0 12px">
+          <input class="field" id="promo" placeholder="Promo code"/>
+          <button class="btn" id="applyPromo">Apply</button>
+        </div>
+        <div class="totals" id="totals">
+          <div class="line"><span>Subtotal</span><b id="subtot">₹0</b></div>
+          <div class="line"><span>Delivery</span><span id="delivery">₹0</span></div>
+          <div class="line"><span>Tax (5%)</span><span id="tax">₹0</span></div>
+          <div class="line"><span>Discount</span><span id="discount">- ₹0</span></div>
+          <div class="line total"><span>Total</span><b id="grand">₹0</b></div>
+        </div>
+        <button class="btn gold" id="checkout" style="width:100%;margin-top:12px">Proceed to Checkout</button>
+        <button class="btn" id="clearCart" style="width:100%;margin-top:8px">Clear Cart</button>
+      </aside>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">© <span id="year"></span> Piquant. Built with love and good food.</div>
+  </footer>
+
+  <script>
+    /* ========== Mobile Menu ========== */
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => {
+        const open = mobileMenu.style.display === 'flex';
+        mobileMenu.style.display = open ? 'none' : 'flex';
+        menuBtn.setAttribute('aria-expanded', String(!open));
+      });
+      mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+        mobileMenu.style.display = 'none';
+        menuBtn.setAttribute('aria-expanded', 'false');
+      }));
+    }
+
+    /* ========== Golden Bubble Indicator (real links allowed) ========== */
+    const nav = document.getElementById('primaryNav');
+    const indicator = document.getElementById('navIndicator');
+    const links = Array.from(document.querySelectorAll('#primaryNav .nav-link'));
+    function moveIndicatorTo(el){ if(!el||!indicator||!nav) return; const nr=nav.getBoundingClientRect(); const er=el.getBoundingClientRect(); const left=(er.left-nr.left)+6; const width=er.width-12; indicator.style.left=left+'px'; indicator.style.width=width+'px'; indicator.style.height='10px'; }
+    function setActive(el){ links.forEach(a=>a.classList.toggle('active',a===el)); moveIndicatorTo(el); }
+    links.forEach(a=>a.addEventListener('click',(e)=>{ const href=(a.getAttribute('href')||'').trim(); const isHash=href===''||href==='#'||href.startsWith('#'); if(isHash){ e.preventDefault(); setActive(a); } }));
+    window.addEventListener('load',()=>{ const file=(location.pathname.split('/').pop()||'').toLowerCase(); let cur=links[0]; for(const a of links){ const href=(a.getAttribute('href')||'').toLowerCase(); if(href&&href!=='#'&&!href.startsWith('#')&&href.split('/').pop()===file){ cur=a; break; } } setActive(cur); });
+    window.addEventListener('resize',()=>{ const cur=document.querySelector('#primaryNav .nav-link.active')||links[0]; moveIndicatorTo(cur); });
+
+    /* ========== Cart Logic (shared key with other pages) ========== */
+    const CART_KEY='piq-cart';
+    const cartEl=document.getElementById('cartItems');
+    const emptyEl=document.getElementById('emptyState');
+    const subtotEl=document.getElementById('subtot');
+    const deliveryEl=document.getElementById('delivery');
+    const taxEl=document.getElementById('tax');
+    const discountEl=document.getElementById('discount');
+    const grandEl=document.getElementById('grand');
+
+    function getCart(){ return JSON.parse(localStorage.getItem(CART_KEY)||'[]'); }
+    function setCart(items){ localStorage.setItem(CART_KEY, JSON.stringify(items)); render(); }
+
+    function rupees(n){ return '₹'+ (Math.round(n)).toLocaleString('en-IN'); }
+
+    // Seed demo data if cart is empty (only for demo)
+    if(getCart().length===0){
+      setCart([
+        {id:1,name:'Dal Tadka + Jeera Rice',price:159,qty:1,tags:['veg','lowoil']},
+        {id:2,name:'Paneer Butter & Rotis',price:219,qty:1,tags:['veg','special']}
+      ]);
+    }
+
+    function lineItemHTML(item){
+      return `
+        <div class="cart-item" data-id="${item.id}">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="thumb" aria-hidden="true" style="width:90px"></div>
+            <div>
+              <div class="name">${item.name}</div>
+              <div class="badge">${item.tags?.includes('veg')?'Veg':'Non‑Veg'}</div>
+            </div>
+          </div>
+          <div class="qty" role="group" aria-label="Quantity">
+            <button class="dec" aria-label="Decrease">−</button>
+            <span>${item.qty}</span>
+            <button class="inc" aria-label="Increase">+</button>
+          </div>
+          <div class="price">${rupees(item.price*item.qty)}</div>
+          <button class="remove" aria-label="Remove">Remove</button>
+        </div>`;
+    }
+
+    function totals(items){
+      const subtotal=items.reduce((s,i)=>s+i.price*i.qty,0);
+      const delivery = subtotal>499?0:39; // free delivery over ₹499
+      const tax=subtotal*0.05;
+      const discount= (window.__PROMO==='WELCOME10') ? Math.min(subtotal*0.1,150) : 0;
+      const total=subtotal+delivery+tax-discount;
+      return {subtotal,delivery,tax,discount,total};
+    }
+
+    function render(){
+      const items=getCart();
+      if(items.length===0){ emptyEl.style.display='grid'; cartEl.innerHTML=''; cartEl.appendChild(emptyEl); }
+      else{
+        emptyEl.style.display='none';
+        cartEl.innerHTML = items.map(lineItemHTML).join('');
+        // wire events
+        cartEl.querySelectorAll('.cart-item').forEach(row=>{
+          const id=Number(row.dataset.id);
+          row.querySelector('.inc').addEventListener('click',()=>{ const it=getCart(); const f=it.find(x=>x.id===id); if(f){f.qty+=1; setCart(it);} });
+          row.querySelector('.dec').addEventListener('click',()=>{ const it=getCart(); const f=it.find(x=>x.id===id); if(f){ f.qty=Math.max(1,f.qty-1); setCart(it);} });
+          row.querySelector('.remove').addEventListener('click',()=>{ const it=getCart().filter(x=>x.id!==id); setCart(it);});
+        });
+      }
+      const t=totals(items);
+      subtotEl.textContent=rupees(t.subtotal);
+      deliveryEl.textContent=rupees(t.delivery);
+      taxEl.textContent=rupees(t.tax);
+      discountEl.textContent='- '+rupees(t.discount);
+      grandEl.textContent=rupees(t.total);
+      // update header badge if present
+      const badge=document.querySelector('#cartBtn b'); if(badge){ badge.textContent=String(items.reduce((s,i)=>s+i.qty,0)); }
+    }
+
+    // Promo handling
+    document.getElementById('applyPromo').addEventListener('click',()=>{
+      const code=(document.getElementById('promo').value||'').trim().toUpperCase();
+      if(code==='WELCOME10'){ window.__PROMO='WELCOME10'; alert('Promo applied: 10% off (up to ₹150)'); }
+      else{ window.__PROMO=null; alert('Invalid code'); }
+      render();
+    });
+
+    document.getElementById('clearCart').addEventListener('click',()=>{ if(confirm('Clear all items?')){ setCart([]); }});
+    document.getElementById('checkout').addEventListener('click',()=>{ alert('Checkout flow not implemented in this demo.'); });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // init
+    render();
+  </script>
+</body>
+</html>
