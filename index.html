@@ -7,7 +7,7 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: "Segoe UI", Arial, sans-serif;
       background-color: #f5f5f5;
       color: #333;
     }
@@ -15,63 +15,132 @@
     /* Banner */
     .banner {
       width: 100%;
-      min-height: 320px;
+      height: 400px;
       background: url('images/banner-1.png') no-repeat center center/cover;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 2.3rem;
+      font-size: 2.5rem;
       font-weight: bold;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
-      margin-bottom: 40px;
+      text-shadow: 0 3px 12px rgba(0,0,0,0.8);
     }
 
     /* Services Section */
     .services {
-      padding: 50px 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      max-width: 1100px;
-      margin: auto;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      padding: 20px;
+      padding: 60px 20px;
+      background: #f9f9f9;
       text-align: center;
-      transition: transform 0.2s;
     }
 
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .card h3 {
-      margin-top: 10px;
-      font-size: 1.2rem;
+    .services h2 {
+      margin-bottom: 40px;
+      font-size: 2rem;
       color: #0d47a1;
     }
 
-    .card p {
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Card Styling */
+    .tour-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tour-card:hover {
+      transform: translateY(-7px);
+    }
+
+    .card-image {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+    }
+
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      border-radius: 6px;
+      color: #fff;
+    }
+
+    .badge.popular { background: #d32f2f; }
+    .badge.bestseller { background: #f57c00; }
+    .badge.new { background: #1976d2; }
+
+    .card-body {
+      padding: 20px;
+      text-align: left;
+    }
+
+    .card-body h3 {
+      margin: 0 0 12px;
+      font-size: 1.3rem;
+      color: #111;
+    }
+
+    .card-body .duration {
+      font-size: 0.9rem;
+      color: #777;
+      margin: 0 0 10px;
+    }
+
+    .card-body .desc {
       font-size: 0.95rem;
-      color: #555;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    .book-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #b71c1c;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .book-btn:hover {
+      background: #8e0000;
     }
 
     /* Footer */
     .footer {
-      background: #0d1117; /* dark background */
+      background: #0d1117;
       color: #ddd;
-      padding: 50px 20px 20px 20px;
+      padding: 60px 20px 30px;
     }
 
     .footer-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 30px;
+      gap: 40px;
       max-width: 1200px;
       margin: auto;
     }
@@ -81,8 +150,8 @@
       margin-bottom: 15px;
     }
 
-    .footer p, 
-    .footer a, 
+    .footer p,
+    .footer a,
     .footer li {
       color: #bbb;
       font-size: 0.95rem;
@@ -101,13 +170,13 @@
     }
 
     .footer .brand img {
-      width: 120px;
-      margin-bottom: 10px;
+      width: 130px;
+      margin-bottom: 15px;
     }
 
     .footer-bottom {
       border-top: 1px solid #333;
-      margin-top: 30px;
+      margin-top: 40px;
       padding-top: 15px;
       text-align: center;
       font-size: 0.85rem;
@@ -117,11 +186,23 @@
     .footer-bottom a {
       color: #bbb;
       margin: 0 10px;
-      text-decoration: none;
     }
 
     .footer-bottom a:hover {
       color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .card-container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .card-container {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -131,21 +212,172 @@
   <div class="banner">
   </div>
 
-  <!-- Services Section -->
+  <!-- Services Section 1 -->
   <section class="services">
-    <div class="card">
-      <h3>Service One</h3>
-      <p>Short description about service one. Highlight its benefits.</p>
-    </div>
-    <div class="card">
-      <h3>Service Two</h3>
-      <p>Short description about service two. Explain why it’s useful.</p>
-    </div>
-    <div class="card">
-      <h3>Service Three</h3>
-      <p>Short description about service three. Emphasize the value.</p>
+    <h2>Our Services</h2>
+    <div class="card-container">
+
+      <!-- Card 1 -->
+      <div class="tour-card">
+        <div class="card-image">
+          <span class="badge popular">POPULAR</span>
+          <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=800&q=80" alt="ATV Adventure Park Tour">
+        </div>
+        <div class="card-body">
+          <h3>ATV Adventure Park Tour</h3>
+          <p class="duration">⏱ 4 Hours (Half day ATV tour)</p>
+          <p class="desc">Thrill ride through Kuala Lumpur’s scenic trails with our guided ATV tour.</p>
+          <button class="book-btn">💬 Book Now</button>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="tour-card">
+        <div class="card-image">
+          <span class="badge bestseller">BESTSELLER</span>
+          <img src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=800&q=80" alt="City Sightseeing Tour">
+        </div>
+        <div class="card-body">
+          <h3>Langkawi Island Hopping</h3>
+          <p class="duration">⏱ 6 Hours (Full day city tour)</p>
+          <p class="desc">Explore the cultural highlights and landmarks of Kuala Lumpur in a day.</p>
+          <button class="book-btn">💬 Book Now</button>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="tour-card">
+        <div class="card-image">
+          <span class="badge new">NEW</span>
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" alt="Beach Getaway Tour">
+        </div>
+        <div class="card-body">
+          <h3>Genting Highlands Day Trip</h3>
+          <p class="duration">⏱ 8 Hours (Day trip)</p>
+          <p class="desc">Relax on Malaysia’s pristine sandy beaches with our exclusive packages.</p>
+          <button class="book-btn">💬 Book Now</button>
+        </div>
+      </div>
+
     </div>
   </section>
+
+
+
+
+  <!-- Services Section 2 -->
+  <section class="services">
+    <div class="card-container">
+
+      <!-- Card 1 -->
+      <div class="tour-card">
+        <div class="card-image">
+          <span class="badge popular">POPULAR</span>
+          <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=800&q=80" alt="ATV Adventure Park Tour">
+        </div>
+        <div class="card-body">
+          <h3>Historical Malacca Day Tour</h3>
+          <p class="duration">⏱ 4 Hours (Half day ATV tour)</p>
+          <p class="desc">Thrill ride through Kuala Lumpur’s scenic trails with our guided ATV tour.</p>
+          <button class="book-btn">💬 Book Now</button>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="tour-card">
+        <div class="card-image">
+          <span class="badge bestseller">BESTSELLER</span>
+          <img src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=800&q=80" alt="City Sightseeing Tour">
+        </div>
+        <div class="card-body">
+          <h3>Fireflies Tour</h3>
+          <p class="duration">⏱ 6 Hours (Full day city tour)</p>
+          <p class="desc">Explore the cultural highlights and landmarks of Kuala Lumpur in a day.</p>
+          <button class="book-btn">💬 Book Now</button>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="tour-card">
+        <div class="card-image">
+          <span class="badge new">NEW</span>
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" alt="Beach Getaway Tour">
+        </div>
+        <div class="card-body">
+          <h3>Kuala Lumpur Countryside Tour</h3>
+          <p class="duration">⏱ 8 Hours (Day trip)</p>
+          <p class="desc">Relax on Malaysia’s pristine sandy beaches with our exclusive packages.</p>
+          <button class="book-btn">💬 Book Now</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+
+
+
+
+
+  <!-- Services Section 3 -->
+  <section class="services">
+    <div class="card-container">
+
+      <!-- Card 1 -->
+      <div class="tour-card">
+        <div class="card-image">
+          <span class="badge popular">POPULAR</span>
+          <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=800&q=80" alt="ATV Adventure Park Tour">
+        </div>
+        <div class="card-body">
+          <h3>Port Dickson Tour</h3>
+          <p class="duration">⏱ 4 Hours (Half day ATV tour)</p>
+          <p class="desc">Thrill ride through Kuala Lumpur’s scenic trails with our guided ATV tour.</p>
+          <button class="book-btn">💬 Book Now</button>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="tour-card">
+        <div class="card-image">
+          <span class="badge bestseller">BESTSELLER</span>
+          <img src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=800&q=80" alt="City Sightseeing Tour">
+        </div>
+        <div class="card-body">
+          <h3>Kuala Lumpur Tower & Twin Tower Tour</h3>
+          <p class="duration">⏱ 6 Hours (Full day city tour)</p>
+          <p class="desc">Explore the cultural highlights and landmarks of Kuala Lumpur in a day.</p>
+          <button class="book-btn">💬 Book Now</button>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="tour-card">
+        <div class="card-image">
+          <span class="badge new">NEW</span>
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" alt="Beach Getaway Tour">
+        </div>
+        <div class="card-body">
+          <h3>Putrajaya City Tour</h3>
+          <p class="duration">⏱ 8 Hours (Day trip)</p>
+          <p class="desc">Relax on Malaysia’s pristine sandy beaches with our exclusive packages.</p>
+          <button class="book-btn">💬 Book Now</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
 
   <!-- Footer -->
   <footer class="footer">
@@ -153,9 +385,8 @@
 
       <!-- Brand Info -->
       <div class="brand">
-        <img src="Artboard-1.png" alt="Lavish Holidays Logo">
-        <p>Your trusted partner in creating authentic Malaysian travel experiences.  
-        Local expertise, tailor-made journeys.</p>
+        <img src="https://dummyimage.com/130x50/0d47a1/ffffff&text=Lavish+Holidays" alt="Lavish Holidays Logo">
+        <p>Your trusted partner in creating authentic Malaysian travel experiences. Local expertise, tailor-made journeys.</p>
       </div>
 
       <!-- Quick Links -->
