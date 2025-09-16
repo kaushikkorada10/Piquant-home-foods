@@ -15,7 +15,9 @@
     /* Banner */
     .banner {
       width: 100%;
-      height: 400px;
+      min-height: 220px;
+      height: 35vw;
+      max-height: 400px;
       background: url('images/banner-1.png') no-repeat center center/cover;
       display: flex;
       align-items: center;
@@ -24,6 +26,27 @@
       font-size: 2.5rem;
       font-weight: bold;
       text-shadow: 0 3px 12px rgba(0,0,0,0.8);
+      box-sizing: border-box;
+      padding: 0 2vw;
+    }
+
+    @media (max-width: 900px) {
+      .banner {
+        font-size: 2rem;
+        height: 32vw;
+        min-height: 160px;
+        max-height: 300px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .banner {
+        font-size: 1.3rem;
+        height: 28vw;
+        min-height: 100px;
+        max-height: 180px;
+        padding: 0 4vw;
+      }
     }
 
     /* Services Section */
@@ -212,10 +235,29 @@
   <div class="banner">
   </div>
 
+
+      <!-- Video Card -->
+      <div class="tour-card video-card" style="border: 2px solid #1976d2; box-shadow: 0 6px 18px rgba(25,118,210,0.12); margin: 20px;">
+        <div class="card-image" style="height: 220px; display: flex; align-items: center; justify-content: center; background: #e3f2fd;">
+          <span class="badge new" style="background: #1976d2;">VIDEO</span>
+          <iframe src="https://drive.google.com/embeddedfolderview?id=1ahunVr_0IA_2l0uMqoRVRMJTM5ITjvWt#grid" width="100%" height="200" frameborder="0" style="border-radius: 8px; border: none; background: #fff;"></iframe>
+        </div>
+        <div class="card-body">
+          <h3 style="color: #1976d2;">Our Experience Video</h3>
+          <p class="duration">🎥 Google Drive Folder</p>
+          <p class="desc">Watch our latest video to get a glimpse of our services and memorable experiences. Click below to view all videos in the folder.</p>
+          <a href="https://drive.google.com/drive/folders/1ahunVr_0IA_2l0uMqoRVRMJTM5ITjvWt?usp=sharing" target="_blank" class="book-btn" style="background: #1976d2; color: #fff; text-align: center; text-decoration: none; display: inline-block;">View Videos</a>
+        </div>
+      </div>
+
+
+
   <!-- Services Section 1 -->
   <section class="services">
     <h2>Our Services</h2>
     <div class="card-container">
+
+
 
       <!-- Card 1 -->
       <div class="tour-card">
